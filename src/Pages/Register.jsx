@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import Add from '../Img/addAvatar.png'
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import {auth} from '../Firebase'
+import { createUserWithEmailAndPassword , updateProfile} from "firebase/auth";
+import {auth, storage} from '../Firebase'
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { doc, setDoc } from "firebase/firestore";
 
 const Register = () => {
 const [err,setErr] = useState(false)
@@ -16,7 +18,39 @@ const handleClick = async (e) =>{
 
   try{
  const res = await createUserWithEmailAndPassword(auth, email, password)
-  }catch(err){
+  
+          
+ 
+ const storageRef = ref(storage, displayName);
+ 
+ const uploadTask = uploadBytesResumable(storageRef, file);
+ 
+ // Register three observers:
+ 
+ uploadTask.on(
+   (error) => {
+    setErr(true);
+    
+   }, 
+   () => {
+     // Handle successful uploads on complete
+     // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+     getDownloadURL(uploadTask.snapshot.ref).then( async (downloadURL) => {
+      await updateProfile(res.user,{
+        displayName,
+        photoURL:downloadURL,
+
+      });
+     
+     });
+   }
+ );
+   await setDoc(doc(db,"users", res.user.uid),{
+    displayName,
+    email,
+    photoURL,
+   })
+}catch(err){
     setErr(true);
   }
 }
