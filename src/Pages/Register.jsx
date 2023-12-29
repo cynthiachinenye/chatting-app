@@ -4,9 +4,11 @@ import { createUserWithEmailAndPassword , updateProfile} from "firebase/auth";
 import {auth, storage, db} from '../Firebase'
 import { ref, uploadBytesResumable, getDownloadURL, } from "firebase/storage";
 import { doc, setDoc,} from "firebase/firestore";
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
 const [err,setErr] = useState(false)
+const navigate = useNavigate()
 
 const handleClick = async (e) =>{
   e.preventDefault() 
@@ -48,7 +50,8 @@ const handleClick = async (e) =>{
         email,
         photoURL: downloadURL,
        });
-       await setDoc(doc(db, "userChat", res.user.uid),{})
+       await setDoc(doc(db, "userChat", res.user.uid),{});
+       navigate("./")
     
      });
    }
