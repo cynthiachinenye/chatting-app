@@ -48,12 +48,14 @@ const handleClick = async (e) =>{
         email,
         photoURL: downloadURL,
        });
+       await setDoc(doc(db, "userChat", res.user.uid),{})
     
      });
    }
  );
  
 }catch(err){
+  console.log(err)
     setErr(true);
   }
 }
