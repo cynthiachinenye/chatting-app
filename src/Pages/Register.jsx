@@ -51,7 +51,7 @@ const handleClick = async (e) =>{
         photoURL: downloadURL,
        });
        await setDoc(doc(db, "userChat", res.user.uid),{});
-       navigate("./")
+       navigate("/")
     
      });
    }
