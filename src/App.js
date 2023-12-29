@@ -9,8 +9,8 @@ import {useContext} from 'react';
 function App() {
 
   const {currentUser} = useContext(AuthContext)
+console.log(currentUser)
 
-  
   return (
     <BrowserRouter>
       <Routes>
