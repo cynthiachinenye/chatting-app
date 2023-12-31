@@ -15,8 +15,11 @@ export const AuthContextProvider =({children}) =>{
          onsub();
         };
     },[]);
+    return(
 
     <AuthContext.Provider value={{currentUser}}>
     {children}
     </AuthContext.Provider>
+
+    );
 }

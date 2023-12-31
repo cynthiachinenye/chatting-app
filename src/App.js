@@ -10,16 +10,17 @@ function App() {
 
   const {currentUser} = useContext(AuthContext)
 
- const ProtectdRoute = ({children})=> {
+ const ProtectedRoute = ({children})=> {
   if(!currentUser){
      return <Navigate to="/login"/>
   }
+  return children
  }
   return (
     <BrowserRouter>
       <Routes>
         <Route path='/'>
-        <Route index element={<ProtectdRoute><Home/></ProtectdRoute>}/>
+        <Route index element={<ProtectedRoute><Home/></ProtectedRoute>}/>
         <Route path="login" element={<Login/>}/>
         <Route path="register" element={<Register/>}/>
         </Route>
