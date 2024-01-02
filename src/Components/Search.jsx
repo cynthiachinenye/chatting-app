@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { collection, query, where, getDocs, updateDoc, serverTimestamp,setDoc,doc } from "firebase/firestore"
 import {db} from "../Firebase"
-import {AuthContext} from "../Components/context/AuthContext"
+import {AuthContext} from "./context/AuthContext"
 const Search = () => {
     const [username, setUsername] = useState("")
     const [user, setUser] = useState(null)
@@ -34,7 +34,7 @@ const Search = () => {
           ? currentUser.uid + currentUser.uid
            : user.uid + currentUser.uid;
           try{
-          const res = await getDocs(db,"chats", combinedId); 
+          const res = await getDocs(doc(db,"chats", combinedId)); 
 
            if(!res.exists()){
             // create a chat in chats collection
@@ -49,16 +49,26 @@ const Search = () => {
             },
             [combinedId +".date"]:serverTimestamp()
            })
+           await updateDoc(doc(db, "userChats", currentUser.uid),{
+            [combinedId + ".userInfo"]:{
+                uid:currentUser.uid,
+                displayName:currentUser.displayName,
+                photoURL:currentUser.photoURL
+            },
+            [combinedId +".date"]:serverTimestamp()
+           })
         }
         }catch(err){
 
           }
-      
+      setUser(null);
+      setUsername("")
     }
     return ( 
         <div className='search'>
             <div className='searchForm'>
-                <input type='text' placeholder='Find a user'  onKeyDown={handleKey} onChange={e=>setUsername(e.target.value)}/>
+                <input type='text' placeholder='Find a user' 
+                 onKeyDown={handleKey} onChange={e=>setUsername(e.target.value)} value={username}/>
             </div>
           {err && <span>User not found! </span>}
         {user && <div className='userChat' onClick={handleSelect}>

@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 const Chats = () => {
+    const [chat,setChat] = useState()
     return (
         <div className='chats'>
             <div className='userChat'>
